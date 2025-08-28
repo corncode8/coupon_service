@@ -1,9 +1,13 @@
 package com.payments.domain.user.entity;
 
 import com.payments.domain.common.BaseEntity;
+import com.payments.domain.coupon.entity.Coupon;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -22,6 +26,12 @@ public class User extends BaseEntity {
     @Column(name = "point", nullable = false)
     private Long point;
 
+    @OneToMany
+    @JoinColumn(name = "coupon_id")
+    private List<Coupon> coupons = new ArrayList<>();
 
+    @OneToMany
+    @JoinColumn(name = "reservation_id")
+    private List<Coupon> reservations = new ArrayList<>();
 
 }

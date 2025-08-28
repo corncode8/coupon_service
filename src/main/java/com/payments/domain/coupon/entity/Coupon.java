@@ -1,6 +1,7 @@
 package com.payments.domain.coupon.entity;
 
 import com.payments.domain.common.BaseEntity;
+import com.payments.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,11 @@ public class Coupon extends BaseEntity {
     @Column(name = "coupon_id", nullable = false, updatable = false)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
     private CouponType type;
 
