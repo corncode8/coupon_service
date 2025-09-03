@@ -9,17 +9,11 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@Table(name = "coupon", indexes = {
+        @Index(name = "idx_user_type_unique", columnList = "user_id, type", unique = true)
+})
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 public class Coupon extends BaseEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "coupon_id", nullable = false, updatable = false)
-    private Long id;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    protected State status = State.UNUSED;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -30,15 +24,11 @@ public class Coupon extends BaseEntity {
     private CouponType type;
 
     @Builder
-    public Coupon(User user, CouponType type, State status) {
+    public Coupon(User user, CouponType type) {
         this.user = user;
         this.type = type;
-        this.status = status;
     }
 
-    public enum State {
-        UNUSED, USED
-    }
 }
 
 

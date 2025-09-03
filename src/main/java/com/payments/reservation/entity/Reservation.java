@@ -15,7 +15,7 @@ public class Reservation extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "reservation_id", nullable = false, updatable = false)
-    private Long reservationId;
+    private Long id;
 
     @Column(name = "time", nullable = false, length = 50)
     private TimeSlice time;
@@ -23,7 +23,5 @@ public class Reservation extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
-
 
 }

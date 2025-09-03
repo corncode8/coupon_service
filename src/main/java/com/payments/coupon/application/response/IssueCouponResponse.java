@@ -8,6 +8,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class IssueCouponResponse {
 
-    public final Long couponId;
+    public final Long userId;
     public final CouponType type;
 }

@@ -12,7 +12,10 @@ public enum BaseResponseStatus {
     SUCCESS(true,HttpStatus.OK.value(), "요청에 성공하였습니다."),
 
     NOT_FIND_USER(false, HttpStatus.NOT_FOUND.value(), "일치하는 유저가 없습니다."),
-    ALREADY_ISSUED_COUPON(false, HttpStatus.NOT_FOUND.value(), "이미 발급된 쿠폰이 존재합니다."),
+
+    DUPLICATED_COUPON(false, HttpStatus.NOT_FOUND.value(), "이미 발급된 쿠폰이 존재합니다."),
+    INVAILED_COUPON(false, HttpStatus.NOT_FOUND.value(), "유효하지 않은 쿠폰입니다."),
+    LOW_ORDER_PRICE(false, HttpStatus.NOT_FOUND.value(), "결제 금액이 쿠폰 최소 결제 금액보다 작습니다."),
 
     /**
      * 500 :  Database, Server 오류
