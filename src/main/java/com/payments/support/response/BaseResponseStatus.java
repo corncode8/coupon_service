@@ -15,7 +15,11 @@ public enum BaseResponseStatus {
 
     DUPLICATED_COUPON(false, HttpStatus.NOT_FOUND.value(), "이미 발급된 쿠폰이 존재합니다."),
     INVAILED_COUPON(false, HttpStatus.NOT_FOUND.value(), "유효하지 않은 쿠폰입니다."),
+    NOT_FOUND_COUPON(false, HttpStatus.NOT_FOUND.value(), "사용 가능한 쿠폰이 없습니다.."),
     LOW_ORDER_PRICE(false, HttpStatus.NOT_FOUND.value(), "결제 금액이 쿠폰 최소 결제 금액보다 작습니다."),
+    ORDER_PRICE_ERROR(false, HttpStatus.NOT_FOUND.value(), "결제 금액 에러."),
+    USE_COUPON_ERROR(false, HttpStatus.NOT_FOUND.value(), "결제 금액 에러."),
+
 
     /**
      * 500 :  Database, Server 오류
@@ -23,11 +27,6 @@ public enum BaseResponseStatus {
     DATABASE_ERROR(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "데이터베이스 연결에 실패하였습니다."),
     DATABASE_EMPTY(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "저장된 데이터가 없습니다."),
     SERVER_ERROR(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "서버와의 연결에 실패하였습니다."),
-
-    SCHEDULER_ERROR(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "스케줄러 오류 발생"),
-    WAIT_QUEUE_ERROR(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "대기열 오류 발생"),
-    WAIT_QUEUE_EMPTY(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "대기열에 유저가 없습니다."),
-    INTERCEPTOR_ERROR(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "인터셉터 오류 발생"),
 
     UNEXPECTED_ERROR(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "예상치 못한 에러가 발생했습니다.");
 

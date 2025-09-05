@@ -15,6 +15,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 public class Coupon extends BaseEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "coupon_id", nullable = false, updatable = false)
+    private Long couponId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -22,6 +27,9 @@ public class Coupon extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
     private CouponType type;
+
+    @Version
+    private Long version;
 
     @Builder
     public Coupon(User user, CouponType type) {
