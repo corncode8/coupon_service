@@ -68,7 +68,7 @@ public class CouponService {
         return response;
     }
 
-    private List<Coupon> isValidCoupon(Long userId, UseCouponRequest request) {
+    public List<Coupon> isValidCoupon(Long userId, UseCouponRequest request) {
         // 원단위 결제금액 및 10원 미만 금액 확인
         if (request.getOrderPrice() % 10 != 0 || request.getOrderPrice() < 10) {
             throw new BaseException(ORDER_PRICE_ERROR);
@@ -105,7 +105,7 @@ public class CouponService {
         return couponList;
     }
 
-    private Coupon matchBestCoupon(List<Coupon> coupons, long orderPrice) {
+    public Coupon matchBestCoupon(List<Coupon> coupons, long orderPrice) {
         Coupon bestCoupon = null;
         long maxDiscount = Long.MIN_VALUE;
 
@@ -126,12 +126,12 @@ public class CouponService {
         return bestCoupon;
     }
 
-    private long calculateDiscount(CouponType type, long orderPrice) {
+    public long calculateDiscount(CouponType type, long orderPrice) {
         switch (type) {
             case DISCOUNT_10_PERCENT:
                 return Math.min(orderPrice / 10, 20000);
             case DISCOUNT_20_PERCENT:
-                return Math.min(orderPrice / 20, 10000);
+                return Math.min(orderPrice / 5, 10000);
             case DISCOUNT_5000_WON:
                 return 5000;
             case DISCOUNT_10000_WON:
@@ -141,7 +141,7 @@ public class CouponService {
         }
     }
 
-    private UseCouponResponse useCouponToResponse(Long orderPrice, CouponType couponType) {
+    public UseCouponResponse useCouponToResponse(Long orderPrice, CouponType couponType) {
         long discountPrice = 0;
         long finalPrice = orderPrice;
 

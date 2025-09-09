@@ -18,7 +18,7 @@ public enum BaseResponseStatus {
     NOT_FOUND_COUPON(false, HttpStatus.NOT_FOUND.value(), "사용 가능한 쿠폰이 없습니다.."),
     LOW_ORDER_PRICE(false, HttpStatus.NOT_FOUND.value(), "결제 금액이 쿠폰 최소 결제 금액보다 작습니다."),
     ORDER_PRICE_ERROR(false, HttpStatus.NOT_FOUND.value(), "결제 금액 에러."),
-    USE_COUPON_ERROR(false, HttpStatus.NOT_FOUND.value(), "결제 금액 에러."),
+    USE_COUPON_ERROR(false, HttpStatus.NOT_FOUND.value(), "쿠폰 결제 금액 에러."),
 
 
     /**

@@ -3,6 +3,7 @@ package com.payments.user.entity;
 import com.payments.support.common.BaseEntity;
 import com.payments.coupon.entity.Coupon;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,9 +21,6 @@ public class User extends BaseEntity {
     @Column(name = "user_id", nullable = false, updatable = false)
     private Long id;
 
-    @Column(nullable = false, length = 100)
-    private String name;
-
     @Column(name = "point", nullable = false)
     private Long point;
 
@@ -33,5 +31,10 @@ public class User extends BaseEntity {
     @OneToMany
     @JoinColumn(name = "reservation_id")
     private List<Coupon> reservations = new ArrayList<>();
+
+    @Builder
+    public User(Long point) {
+        this.point = point;
+    }
 
 }
