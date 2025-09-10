@@ -28,7 +28,7 @@ public class CouponService {
     private final CouponStoreRepository storeRepository;
     private final UserService userService;
 
-    @Transactional(readOnly = true)
+    @Transactional
     public IssueCouponResponse issueCoupon (Long userId, CouponType type) {
         User user = userService.findById(userId);
 
@@ -151,7 +151,7 @@ public class CouponService {
                 finalPrice -= discountPrice;
                return new UseCouponResponse(orderPrice, discountPrice, finalPrice, couponType);
             case DISCOUNT_20_PERCENT:
-                discountPrice = Math.min(orderPrice / 20, 10000);
+                discountPrice = Math.min(orderPrice / 5, 10000);
                 finalPrice -= discountPrice;
                 return new UseCouponResponse(orderPrice, discountPrice, finalPrice, couponType);
             case DISCOUNT_5000_WON:

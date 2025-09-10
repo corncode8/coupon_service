@@ -2,6 +2,7 @@ package com.payments.coupon;
 
 import com.payments.coupon.application.CouponService;
 import com.payments.coupon.application.request.UseCouponRequest;
+import com.payments.coupon.application.response.UseCouponResponse;
 import com.payments.coupon.entity.Coupon;
 import com.payments.coupon.entity.CouponType;
 import com.payments.coupon.repository.CouponReaderRepository;
@@ -31,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 @ExtendWith(MockitoExtension.class)
-public class CouponServiceTest {
+class CouponServiceTest {
 
     @Mock
     private CouponReaderRepository readerRepository;
@@ -184,14 +185,46 @@ public class CouponServiceTest {
 
 
 
-//    @DisplayName("useCouponToResponse 테스트")
-//    @Test
-//    void useCouponToResponseTest() {
-//        //given
-//
-//        //when
-//
-//        //then
-//
-//    }
+    @DisplayName("useCouponToResponse 테스트")
+    @Test
+    void useCouponToResponseTest() {
+        //given
+        Long orderPrice = 100000L;
+        CouponType[] types = {
+                CouponType.DISCOUNT_10_PERCENT,
+                CouponType.DISCOUNT_20_PERCENT,
+                CouponType.DISCOUNT_5000_WON,
+                CouponType.DISCOUNT_10000_WON
+        };
+
+        //when
+        for (CouponType type : types) {
+            long expectiedDiscount = 0;
+
+            switch (type) {
+                case DISCOUNT_10_PERCENT:
+                    expectiedDiscount = Math.min(orderPrice / 10, 20000);
+                    break;
+                case DISCOUNT_20_PERCENT:
+                    expectiedDiscount = Math.min(orderPrice / 5, 10000);
+                    break;
+                case DISCOUNT_5000_WON:
+                    expectiedDiscount = 5000;
+                    break;
+                case DISCOUNT_10000_WON:
+                    expectiedDiscount = 10000;
+                    break;
+            }
+
+            UseCouponResponse actual = couponService.useCouponToResponse(orderPrice, type);
+            UseCouponResponse expected = new UseCouponResponse(orderPrice, expectiedDiscount, orderPrice - expectiedDiscount, type);
+
+            //then
+            assertEquals(expectiedDiscount, actual.getDiscountPrice());
+            assertEquals(expected, actual);
+        }
+
+    }
 }
+
+
