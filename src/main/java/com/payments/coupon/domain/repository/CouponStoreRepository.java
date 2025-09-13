@@ -1,6 +1,6 @@
-package com.payments.coupon.repository;
+package com.payments.coupon.domain.repository;
 
-import com.payments.coupon.entity.Coupon;
+import com.payments.coupon.domain.entity.Coupon;
 
 import java.util.List;
 

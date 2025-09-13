@@ -1,6 +1,6 @@
 package com.payments.coupon.application.response;
 
-import com.payments.coupon.entity.CouponType;
+import com.payments.coupon.domain.entity.CouponType;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 

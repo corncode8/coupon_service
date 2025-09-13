@@ -1,7 +1,7 @@
-package com.payments.coupon.entity;
+package com.payments.coupon.domain.entity;
 
 import com.payments.support.common.BaseEntity;
-import com.payments.user.entity.User;
+import com.payments.user.domain.entity.User;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;

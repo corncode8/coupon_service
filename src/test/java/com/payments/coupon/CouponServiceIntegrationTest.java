@@ -5,7 +5,7 @@ import com.payments.coupon.application.request.UseCouponRequest;
 import com.payments.support.exception.BaseException;
 import com.payments.support.response.BaseResponseStatus;
 import com.payments.user.application.UserService;
-import com.payments.user.entity.User;
+import com.payments.user.domain.entity.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.payments.coupon.entity.CouponType.*;
+import static com.payments.coupon.domain.entity.CouponType.*;
 import static com.payments.support.response.BaseResponseStatus.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

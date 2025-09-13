@@ -1,6 +1,6 @@
-package com.payments.coupon.infrastructure;
+package com.payments.coupon.domain.infrastructure;
 
-import com.payments.coupon.entity.Coupon;
+import com.payments.coupon.domain.entity.Coupon;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

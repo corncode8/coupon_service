@@ -1,4 +1,4 @@
-package com.payments.coupon.entity;
+package com.payments.coupon.domain.entity;
 
 public enum CouponType {
     DISCOUNT_10_PERCENT,

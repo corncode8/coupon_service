@@ -1,7 +1,7 @@
-package com.payments.user.infrastructure;
+package com.payments.user.domain.infrastructure;
 
-import com.payments.user.entity.User;
-import com.payments.user.repository.UserStoreRepository;
+import com.payments.user.domain.entity.User;
+import com.payments.user.domain.repository.UserStoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

@@ -1,6 +1,6 @@
-package com.payments.coupon.infrastructure;
+package com.payments.coupon.domain.infrastructure;
 
-import com.payments.coupon.repository.CouponReaderRepository;
+import com.payments.coupon.domain.repository.CouponReaderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

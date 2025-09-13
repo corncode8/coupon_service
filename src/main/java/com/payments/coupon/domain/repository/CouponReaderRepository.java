@@ -1,4 +1,4 @@
-package com.payments.coupon.repository;
+package com.payments.coupon.domain.repository;
 
 
 public interface CouponReaderRepository {

@@ -1,7 +1,7 @@
-package com.payments.coupon.infrastructure;
+package com.payments.coupon.domain.infrastructure;
 
-import com.payments.coupon.entity.Coupon;
-import com.payments.coupon.repository.CouponStoreRepository;
+import com.payments.coupon.domain.entity.Coupon;
+import com.payments.coupon.domain.repository.CouponStoreRepository;
 import com.payments.support.exception.BaseException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

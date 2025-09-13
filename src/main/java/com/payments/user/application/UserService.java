@@ -1,9 +1,9 @@
 package com.payments.user.application;
 
 import com.payments.support.exception.BaseException;
-import com.payments.user.entity.User;
-import com.payments.user.repository.UserReaderRepository;
-import com.payments.user.repository.UserStoreRepository;
+import com.payments.user.domain.entity.User;
+import com.payments.user.domain.repository.UserReaderRepository;
+import com.payments.user.domain.repository.UserStoreRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
