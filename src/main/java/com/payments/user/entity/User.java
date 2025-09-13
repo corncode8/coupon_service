@@ -12,7 +12,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@Table(name = "user")
+@Table(name = "users")
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 public class User extends BaseEntity {
 
@@ -28,13 +28,11 @@ public class User extends BaseEntity {
     @JoinColumn(name = "coupon_id")
     private List<Coupon> coupons = new ArrayList<>();
 
-    @OneToMany
-    @JoinColumn(name = "reservation_id")
-    private List<Coupon> reservations = new ArrayList<>();
 
     @Builder
-    public User(Long point) {
+    public User(Long point, List<Coupon> coupons) {
         this.point = point;
+        this.coupons = coupons;
     }
 
 }

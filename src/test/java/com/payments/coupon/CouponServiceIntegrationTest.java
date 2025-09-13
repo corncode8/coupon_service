@@ -11,7 +11,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.test.context.ActiveProfiles;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -21,7 +22,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Testcontainers
 @SpringBootTest
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+//@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@ActiveProfiles("test")
 class CouponServiceIntegrationTest {
 
     @Autowired
@@ -44,20 +46,23 @@ class CouponServiceIntegrationTest {
     * 한 사람당 쿠폰은 종류별로 한 개만 발급받을 수 있다.
     * 같은 쿠폰을 여러 번 발급할 경우, 하나의 요청만 성공하고 나머지는 실패 처리
     */
-//    @DisplayName("쿠폰 발급 동시성 테스트")
-//    @Test
-//    void issueTest() {
-//        //given
-//        User user = User.builder().point(10000L).build();
-//
-//        //when
-//        IssueCouponResponse issueCouponResponse = couponService.issueCoupon(user.getId(), CouponType.DISCOUNT_10_PERCENT);
-//
-//        //then
-//        assertEquals(user.getId(), issueCouponResponse.getUserId());
-//        assertEquals(CouponType.DISCOUNT_10_PERCENT, issueCouponResponse.getType());
-//
-//    }
+    @DisplayName("쿠폰 발급 동시성 테스트")
+    @Test
+    void issueTest() {
+        //given
+        User user = User.builder().point(10000L).build();
+        userService.save(user);
+
+
+
+        //when
+        IssueCouponResponse issueCouponResponse = couponService.issueCoupon(user.getId(), CouponType.DISCOUNT_10_PERCENT);
+
+        //then
+        assertEquals(user.getId(), issueCouponResponse.getUserId());
+        assertEquals(CouponType.DISCOUNT_10_PERCENT, issueCouponResponse.getType());
+
+    }
 
 //    @DisplayName("쿠폰 사용 동시성 테스트")
 //    @Test
