@@ -1,36 +1,38 @@
 package com.payments.coupon;
 
 import com.payments.coupon.application.CouponService;
-import com.payments.coupon.application.response.IssueCouponResponse;
-import com.payments.coupon.entity.CouponType;
-import com.payments.coupon.repository.CouponReaderRepository;
-import com.payments.coupon.repository.CouponStoreRepository;
+import com.payments.coupon.application.request.UseCouponRequest;
+import com.payments.support.exception.BaseException;
+import com.payments.support.response.BaseResponseStatus;
 import com.payments.user.application.UserService;
 import com.payments.user.entity.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.test.context.ActiveProfiles;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static com.payments.coupon.entity.CouponType.*;
+import static com.payments.support.response.BaseResponseStatus.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Testcontainers
 @SpringBootTest
-//@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @ActiveProfiles("test")
 class CouponServiceIntegrationTest {
-
-    @Autowired
-    private CouponReaderRepository readerRepository;
-
-    @Autowired
-    private CouponStoreRepository storeRepository;
 
     @Autowired
     private UserService userService;
@@ -43,48 +45,97 @@ class CouponServiceIntegrationTest {
             .withReuse(true);
 
     /*
-    * 한 사람당 쿠폰은 종류별로 한 개만 발급받을 수 있다.
     * 같은 쿠폰을 여러 번 발급할 경우, 하나의 요청만 성공하고 나머지는 실패 처리
+    * 한 명의 사용자에 대해 동시에 같은 타입 쿠폰 발급을 시도
     */
     @DisplayName("쿠폰 발급 동시성 테스트")
     @Test
-    void issueTest() {
+    void issueTest() throws InterruptedException{
         //given
-        User user = User.builder().point(10000L).build();
-        userService.save(user);
+        User user = saveTestUser();
 
+        AtomicInteger successCnt = new AtomicInteger(0);
+        AtomicInteger failCnt = new AtomicInteger(0);
 
+        int threadCnt = 5;
+        ExecutorService executorService = Executors.newFixedThreadPool(threadCnt);
+        CountDownLatch latch = new CountDownLatch(threadCnt);
+        List<BaseResponseStatus> exceptionList = new ArrayList<>();
 
         //when
-        IssueCouponResponse issueCouponResponse = couponService.issueCoupon(user.getId(), CouponType.DISCOUNT_10_PERCENT);
+        for (int i = 0 ; i < threadCnt; i++) {
+            executorService.execute(() -> {
+                try {
+                    couponService.issueCoupon(user.getId(), DISCOUNT_10_PERCENT);
+                    successCnt.incrementAndGet();
+                } catch (BaseException e) {
+                    exceptionList.add(e.getStatus());
+                    failCnt.incrementAndGet();
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+
+        latch.await();
+        executorService.shutdown();
 
         //then
-        assertEquals(user.getId(), issueCouponResponse.getUserId());
-        assertEquals(CouponType.DISCOUNT_10_PERCENT, issueCouponResponse.getType());
+        assertEquals(1, successCnt.get(), "성공 1건");
+        assertEquals(threadCnt - 1, failCnt.get(), "1건을 제외한 모든 스레드 실패");
 
+        // 에러코드 일치 확인
+        assertTrue(exceptionList.stream().allMatch(status -> status ==  DUPLICATED_COUPON));
     }
 
-//    @DisplayName("쿠폰 사용 동시성 테스트")
-//    @Test
-//    void useTest() {
-//        //given
-//
-//        //when
-//
-//        //then
-//
-//    }
+    private User saveTestUser() {
+        User user = User.builder()
+                .point(10000L)
+                .build();
+        userService.save(user);
+        return user;
+    }
+
+    /*
+    * 같은 쿠폰을 동시에 여러번 사용할 경우, 하나의 요청만 성공하고 나머지는 에러 처리
+    * */
+    @DisplayName("쿠폰 사용 동시성 테스트")
+    @Test
+    void useTest() throws Exception{
+        //given
+        User user = saveTestUser();
+        couponService.issueCoupon(user.getId(), DISCOUNT_10_PERCENT);
+        UseCouponRequest request = new UseCouponRequest(10000L, DISCOUNT_10_PERCENT);
+
+        AtomicInteger successCnt = new AtomicInteger(0);
+        AtomicInteger failCnt = new AtomicInteger(0);
+        int threadCnt = 5;
+
+        ExecutorService executorService = Executors.newFixedThreadPool(threadCnt);
+        CountDownLatch latch = new CountDownLatch(threadCnt);
+
+        //when
+        for (int i = 0 ; i < threadCnt; i++) {
+            executorService.execute(() -> {
+                try {
+                    couponService.useCoupon(user.getId(),request);
+                    successCnt.incrementAndGet();
+                } catch (ObjectOptimisticLockingFailureException e) {
+                      failCnt.incrementAndGet();
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+
+        latch.await();
+        executorService.shutdown();
 
 
-//    @DisplayName("쿠폰 발급 and 사용 테스트")
-//    @Test
-//    void test() {
-//        //given
-//
-//        //when
-//
-//        //then
-//
-//    }
+        //then
+        assertEquals(1, successCnt.get(), "성공 1건");
+        assertEquals(threadCnt - 1, failCnt.get(), "1건을 제외한 모든 스레드 실패");
+
+    }
 
 }

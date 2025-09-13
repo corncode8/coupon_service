@@ -60,6 +60,7 @@ public class CouponService {
 
         try {
             storeRepository.use(coupon.getCouponId());
+//            storeRepository.flush();
         } catch (Exception e) {
             throw new BaseException(USE_COUPON_ERROR);
         }
