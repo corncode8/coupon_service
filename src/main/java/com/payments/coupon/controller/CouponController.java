@@ -6,6 +6,7 @@ import com.payments.coupon.application.request.UseCouponRequest;
 import com.payments.coupon.application.response.IssueCouponResponse;
 import com.payments.coupon.application.response.UseCouponResponse;
 import com.payments.support.response.BaseResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class CouponController {
     @PostMapping("/{userId}/coupons/issue")
     public BaseResponse<IssueCouponResponse> issueCoupon(
             @PathVariable final long userId,
-            @RequestBody final IssueCouponRequest request
+            @RequestBody @Valid final IssueCouponRequest request
     ) {
         IssueCouponResponse execute = couponService.issueCoupon(userId, request.getType());
 
@@ -30,7 +31,7 @@ public class CouponController {
     @PostMapping("/{userId}/coupons/use")
     public BaseResponse<UseCouponResponse> useCoupon(
             @PathVariable final long userId,
-            @RequestBody final UseCouponRequest request
+            @RequestBody @Valid final UseCouponRequest request
     ) {
         UseCouponResponse execute = couponService.useCoupon(userId, request);
 

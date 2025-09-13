@@ -2,14 +2,18 @@ package com.payments.coupon.application.request;
 
 import com.payments.coupon.domain.entity.CouponType;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 public class UseCouponRequest {
 
     @NotNull
-    private final long orderPrice;
+    private long orderPrice;
 
     @NotNull
-    private final CouponType couponType;
+    private CouponType couponType;
 }

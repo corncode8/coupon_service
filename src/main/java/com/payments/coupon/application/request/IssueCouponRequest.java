@@ -1,12 +1,14 @@
 package com.payments.coupon.application.request;
 
 import com.payments.coupon.domain.entity.CouponType;
-import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 public class IssueCouponRequest {
 
-    @NotBlank
-    private final CouponType type;
+    @NotNull
+    private CouponType type;
 }
